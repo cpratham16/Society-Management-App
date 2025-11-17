@@ -1,6 +1,5 @@
 //HomePageComponent
 export {default as HeroSection} from "./components/HomePageComponents/HeroSection/HeroSection";
-export {default as Footer} from "./components/HomePageComponents/Footer/Footer";
 export {default as ManagmentPeoples} from "./components/HomePageComponents/ManagmentPeoples/ManagmentPeoples";
 export {default as SocietyRules} from "./components/HomePageComponents/SocietyRules/SocietyRules";
 export {default as Event} from "./components/HomePageComponents/Event/Event";

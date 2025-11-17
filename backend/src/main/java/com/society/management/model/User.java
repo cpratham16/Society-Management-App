@@ -8,8 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.index.Indexed;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +39,16 @@ public class User {
     @Indexed
     private String societyCode;
 
+    private String houseNo;
+
+    private String familyName;
+
+    private Integer totalMembers;
+
+    private String professionDescription;
+
+    private String publicUrl;
+
     private Role role; // ADMIN, MEMBER, GUEST
 
     private boolean verified; // Email OTP verified
@@ -50,6 +60,9 @@ public class User {
     // Family Members - Embedded
     @Builder.Default
     private List<FamilyMember> familyMembers = new ArrayList<>();
+
+    @Builder.Default
+    private List<ProfileAdvertise> advertises = new ArrayList<>();
 
     // Refresh Tokens for multiple device login
     @Builder.Default

@@ -1,4 +1,4 @@
-import axiosInstance from '../http';
+import axiosInstance, { getHomePageData as fetchHomePageCollections } from '../http';
 import { API_ENDPOINTS } from '../http/apiConfig';
 
 export const userService = {
@@ -22,10 +22,7 @@ export const userService = {
     return response.data;
   },
 
-  getHomePageData: async () => {
-    const response = await axiosInstance.get('/user/home-data');
-    return response.data;
-  },
+  getHomePageData: fetchHomePageCollections,
 };
 
 export default userService;

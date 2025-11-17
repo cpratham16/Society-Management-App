@@ -12,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/contacts")
+@RequestMapping({"/api/contacts", "/api/contact"})
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
 @Slf4j
 public class ContactController {

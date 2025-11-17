@@ -1,6 +1,7 @@
 package com.society.management.dto.response;
 
 import com.society.management.model.FamilyMember;
+import com.society.management.model.ProfileAdvertise;
 import com.society.management.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +22,16 @@ public class UserDto {
     private String phone;
     private String profession;
     private String societyCode;
+    private String houseNo;
+    private String familyName;
+    private Integer totalMembers;
+    private String professionDescription;
+    private String profileImg;
+    private String publicUrl;
     private Role role;
     private String profilePhotoUrl;
     private List<FamilyMember> familyMembers;
+    private List<ProfileAdvertise> advertises;
     private Instant createdAt;
     private Instant updatedAt;
 }

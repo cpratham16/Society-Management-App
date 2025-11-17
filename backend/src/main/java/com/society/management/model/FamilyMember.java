@@ -14,5 +14,7 @@ public class FamilyMember {
     private String name;
     private String relation; // Parent, Child, Spouse, etc.
     private Integer age;
+    private String gender;
+    private String proffession;
     private String photoUrl; // From Cloudinary
 }

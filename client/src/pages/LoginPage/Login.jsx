@@ -6,7 +6,7 @@ import { Loader } from '../../import';
 import Styles from './Login.module.css';
 
 const Login = () => {
-    const {Auth,Activate,setAdmin}=useGlobalContext();
+    const {Auth,Activate,setAdmin,setUserData}=useGlobalContext();
     const [show,setShow]=useState(false);
     const[message,setmessage]=useState('');
     const [loading,setLoading]=useState(false);
@@ -36,29 +36,33 @@ const Login = () => {
       e.preventDefault();
       setLoading(true);
       const {email , password}=loginFormData;
-if(email && password){
-     const {data} = await login({data:loginFormData});
-     if(data.next === false){
-         setmessage(data.message);
-         setLoading(false)
-        }
-        else{
-            if(!unMounted){
-                if(data.isAdmin){
-                   setAdmin(true);
-                   history.push(data.path);
-                }else{
+      if(email && password){
+        try{
+          const {data} = await login({data:loginFormData});
+          if(!data.success){
+            setmessage(data.message || 'Invalid credentials');
+            setLoading(false);
+            return;
+          }
+
+          if(!unMounted){
+            setAdmin(data.isAdmin);
             Auth(data.auth);
             Activate(data.activate);
+            setUserData(data.user);
             setmessage('');
             setLoading(false);
-            history.push('/profile');}
+            history.push(data.path || (data.isAdmin ? '/' : '/profile'));
+          }
+        }catch(err){
+          setmessage(err?.response?.data?.message || 'Unable to login. Please try again.');
+          setLoading(false);
         }
-     }
-}
-else{
-    setmessage('please fill the valid details !')
-}
+      }
+      else{
+        setmessage('please fill the valid details !')
+        setLoading(false);
+      }
   }
   useEffect(()=>{
       document.title='Login - Digital Society'

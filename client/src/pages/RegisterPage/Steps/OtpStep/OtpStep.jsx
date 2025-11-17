@@ -3,9 +3,10 @@ import { verifyOtp,sendOtp } from "../../../../http/index";
 import { useGlobalContext } from "../../../../context/context";
 import Styles from "./OtpStep.module.css";
 import { Loader } from "../../../../import";
-const Step2 = ({onProgress}) => {
-    const {verifyUser,Auth,setVerifyUserDetails}=useGlobalContext();
-  const[otp,setOtp]=useState(new Array(4).fill(""));
+const OTP_LENGTH = 6;
+const Step2 = ({onProgress,onNext}) => {
+    const {verifyUser,Auth}=useGlobalContext();
+  const[otp,setOtp]=useState(new Array(OTP_LENGTH).fill(""));
   const [loading,setLoading]=useState(false);
   let countdown=180;
   const[domTime,setDomTime]=useState(countdown);
@@ -23,51 +24,58 @@ const Step2 = ({onProgress}) => {
  async function submit(e){
        e.preventDefault();
        const otpString = otp.join('');
-       const {email,hash,houseNo}=verifyUser;
-       if(otpString.length===4 && email && hash && houseNo){
+       const {email}=verifyUser;
+       if(otpString.length===OTP_LENGTH && email){
            setLoading(true);
            setLoadingMessage('verifying..')
-           const {data} = await verifyOtp({otp: otpString , email , hash , houseNo});
-           if(data.next===false){
-               setMessage(data.message);
-               setOtp(new Array(4).fill(""));
-               Auth(false);
-               if(!unMounted){
-                   document.getElementsByClassName('idiv')[0].focus();
-               }
-
-            }else{
-                if(!unMounted){
+           try{
+                const {data} = await verifyOtp({otp: otpString , email });
+                if(!data?.success){
+                    setMessage(data?.message || 'Invalid OTP');
+                    setOtp(new Array(OTP_LENGTH).fill(""));
+                    Auth(false);
+                    if(!unMounted){
+                        document.getElementsByClassName('idiv')[0].focus();
+                    }
+                }else if(!unMounted){
                     onProgress();
-                    Auth(true);
+                    Auth(false);
                     setMessage('');
+                    onNext && onNext();
                 }
-            }
+           }catch(err){
+                const errorMsg = err?.response?.data?.message || 'Verification failed. Please try again.';
+                setMessage(errorMsg);
+                setOtp(new Array(OTP_LENGTH).fill(""));
+           }finally{
+                if(!unMounted){
+                    setLoading(false);
+                    setLoadingMessage('');
+                }
+           }
        }
        else{
-           setMessage('enter Valid Otp !');
-           setOtp(new Array(4).fill(""));
+           setMessage(`enter ${OTP_LENGTH}-digit OTP !`);
+           setOtp(new Array(OTP_LENGTH).fill(""));
+           setLoading(false);
+           setLoadingMessage('');
         }
-        setLoading(false);
-        setLoadingMessage('')
-       
+        
   }
   async function resendOtp(){
       try{
           setLoading(true);
           setLoadingMessage('otp resending');
-          const {email,houseNo,societyCode}=verifyUser;
-        const {data} = await sendOtp({data:{email,houseNo,societyCode}});
-        if(data.next === false){
-            setMessage(data.message);
+          const {email}=verifyUser;
+        const {data} = await sendOtp({email});
+        if(!data?.success){
+            setMessage(data?.message || 'Unable to resend OTP.');
         }
-        else{
-            if(!unMounted){
-                setVerifyUserDetails(data);
-                countdown=180;
-                setDomTime(countdown);
-                setCountdown();
-            }
+        else if(!unMounted){
+            setMessage('');
+            countdown=180;
+            setDomTime(countdown);
+            setCountdown();
         }
         setLoading(false);
         setLoadingMessage('')

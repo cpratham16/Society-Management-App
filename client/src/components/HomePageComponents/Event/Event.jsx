@@ -1,4 +1,4 @@
-  import Styles from "./Event.module.css";
+ import Styles from "./Event.module.css";
 import {EventCard,SwiperSlider} from '../../../import';
 
 function Event({events}) {

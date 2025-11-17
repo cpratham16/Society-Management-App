@@ -14,16 +14,22 @@ const EmailStep = ({onNext}) => {
     })
    async function submit(e){
       e.preventDefault();
+      setMessage('');
       setLoading(true);
-      const {data} = await verifyAdmin({data:formData});
-      //invalid
-      if(data.next === false){
-        setMessage(data.message);
-      }else{
-        tempAdminData(data);
+      try{
+        const {data} = await verifyAdmin(formData);
+        if(!data.success){
+          setMessage(data.message || 'Unable to validate admin code');
+          return;
+        }
+        tempAdminData(data.data);
         onNext();
+      }catch(error){
+        const apiMessage = error?.response?.data?.message || error?.message;
+        setMessage(apiMessage || 'Unable to validate admin code');
+      }finally{
+        setLoading(false);
       }
-      setLoading(false)
     }
     function handleChange(e){
         const {name,value}=e.target;

@@ -67,7 +67,7 @@ const Register = ({step}) => {
                <div className={`${Styles.text}`}>
                  <p className='text'>Account setup</p>
                  <p className='text'>Verify</p>
-                 <p className='text'>Personal Details</p>
+                 <p className='text'>Complete</p>
                </div>
              <CurrentStep onNext={onNext} onProgress={onProgress} />
             </div>

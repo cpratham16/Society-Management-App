@@ -19,16 +19,34 @@ const AdminDetail = () => {
     const [show,setShow]=useState(false);
    async function submit(e){
       e.preventDefault();
-      setLoading(true);
-      const {data} = await registerAdmin({data:{...formData,...tempAdmin}});
-      if(data.next === false){
-        setMessage(data.message);
-      }else{
-        if (!unMounted) {
-       setAdmin(true);
-       history.push('/')}
+      if(!tempAdmin?.userId){
+        setMessage('Admin verification is required before registration');
+        return;
       }
-      setLoading(false);
+      setMessage('');
+      setLoading(true);
+      try{
+        const payload = {
+          userId: tempAdmin.userId,
+          otp: formData.otp,
+          password: formData.password,
+          profilePhoto: formData.img,
+        };
+        const {data} = await registerAdmin(payload);
+        if(!data.success){
+          setMessage(data.message || 'Unable to register admin');
+          return;
+        }
+        if (!unMounted) {
+          setAdmin(true);
+          history.push('/');
+        }
+      }catch(error){
+        const apiMessage = error?.response?.data?.message || error?.message;
+        setMessage(apiMessage || 'Unable to register admin');
+      }finally{
+        setLoading(false);
+      }
     }
     function handleChange(e){
         const {name,value}=e.target;
@@ -58,10 +76,13 @@ const AdminDetail = () => {
         };
     }
     useEffect(() => {
+        if(!tempAdmin?.userId){
+          history.replace('/registeradmin');
+        }
         return () => {
             setUnMounted(true);
         };
-    }, []);
+    }, [history, tempAdmin]);
     return loading ? <Loader message='Registering...' type='true'/>: (
          <form onSubmit={submit} className='box-shadow'>
            <p className='invalid'>{message}</p>

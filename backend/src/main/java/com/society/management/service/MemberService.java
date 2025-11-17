@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -183,9 +184,17 @@ public class MemberService {
                 .phone(user.getPhone())
                 .profession(user.getProfession())
                 .societyCode(user.getSocietyCode())
+                .houseNo(user.getHouseNo())
+                .familyName(user.getFamilyName() != null ? user.getFamilyName() : user.getName())
+                .totalMembers(user.getTotalMembers() != null ? user.getTotalMembers() :
+                        (user.getFamilyMembers() != null ? user.getFamilyMembers().size() : 0))
+                .professionDescription(user.getProfessionDescription())
+                .profileImg(user.getProfilePhotoUrl())
+                .publicUrl(user.getPublicUrl())
                 .role(user.getRole())
                 .profilePhotoUrl(user.getProfilePhotoUrl())
-                .familyMembers(user.getFamilyMembers())
+                .familyMembers(user.getFamilyMembers() != null ? user.getFamilyMembers() : Collections.emptyList())
+                .advertises(user.getAdvertises() != null ? user.getAdvertises() : Collections.emptyList())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

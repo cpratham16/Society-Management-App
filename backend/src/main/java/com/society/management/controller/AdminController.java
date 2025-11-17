@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -86,5 +86,7 @@ public class AdminController {
                 .build();
 
         return ResponseEntity.ok(ApiResponse.success(stats, "Dashboard stats fetched"));
+
+
     }
 }

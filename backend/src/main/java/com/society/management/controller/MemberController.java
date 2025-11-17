@@ -15,10 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping({"/api/members", "/api/user"})
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
 @Slf4j
 public class MemberController {
@@ -79,6 +79,13 @@ public class MemberController {
         String currentUserId = getCurrentUserId();
         return ResponseEntity.ok(memberService.updateFamilyMember(memberId, familyMemberId, request, currentUserId));
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<ApiResponse<UserDto>> getProfile() {
+        String currentUserId = getCurrentUserId();
+        return ResponseEntity.ok(memberService.getMemberProfile(currentUserId));
+    }
+
 
     @DeleteMapping("/{memberId}/family/{familyMemberId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")

@@ -75,6 +75,16 @@ const authService = {
     window.location.href = '/login';
   },
 
+  initiateAdminRegistration: async (payload) => {
+    const response = await axiosInstance.post(API_ENDPOINTS.ADMIN_REGISTER_INIT, payload);
+    return response.data;
+  },
+
+  completeAdminRegistration: async (payload) => {
+    const response = await axiosInstance.post(API_ENDPOINTS.ADMIN_REGISTER_COMPLETE, payload);
+    return response.data;
+  },
+
   getCurrentUser: () => {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
@@ -86,6 +96,6 @@ const authService = {
 };
 
 export const logoutAdmin = authService.logout;
-export const verifyAdmin = authService.verifyOtp;
+export const verifyAdmin = authService.initiateAdminRegistration;
 
 export default authService;

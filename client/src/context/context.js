@@ -28,8 +28,11 @@ const AppProvider = ({ children }) => {
     const setChangePassUSerData=({hash,email})=>{
       setChangePassUSer({hash,email});
     }
-    const setVerifyUserDetails = ({email,houseNo,hash,societyCode})=>{
-        setVerifyUser({email:email,houseNo:houseNo,hash:hash,societyCode:societyCode});
+    const setVerifyUserDetails = (details = {})=>{
+        setVerifyUser((prev)=>({
+          ...prev,
+          ...details,
+        }));
     }
     const Auth = (value) => {
        setIsAuth(value)

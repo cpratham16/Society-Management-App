@@ -47,6 +47,8 @@ export const API_ENDPOINTS = {
   ADMIN_DELETE_USER: (id) => `${API_BASE_URL}/admin/users/${id}`,
   ADMIN_GET_SETTINGS: `${API_BASE_URL}/admin/settings`,
   ADMIN_UPDATE_SETTINGS: `${API_BASE_URL}/admin/settings`,
+  ADMIN_REGISTER_INIT: `${API_BASE_URL}/auth/admin/initiate`,
+  ADMIN_REGISTER_COMPLETE: `${API_BASE_URL}/auth/admin/complete`,
 };
 
 export default API_BASE_URL;
